@@ -12,27 +12,27 @@ students = [
 
 app = Flask(__name__)
 
-@app.route('/students/')
+@app.route('/student/')
 def get_students():
-    response = jsonify(students)
-    response.status_code =200
-    return response
+    if request.args.get("sid"):
+        for student in students:
+            if student["studentid"] == int(request.args.get("sid")):
+                response = jsonify(student)
+                response.status_code =200
+                return response
+        response = jsonify("Student not found...")
+        response.status_code =404
+        return response
+    else :
+        response = jsonify(students)
+        response.status_code =200
+        return response
 
-@app.route('/students/<int:student_id>')
-def get_student_by_id(student_id):
-    response = jsonify("Student not found...")
-    response.status_code =404
-    for student in students:
-        if student["studentid"] == student_id:
-            response = jsonify(student)
-            response.status_code =200
-            return response
-    return response
 
-@app.route('/students/<int:student_id>', methods = ["DELETE"])
-def delete_student_by_id(student_id):
+@app.route('/student/', methods = ["DELETE"])
+def delete_student_by_id():
     for student in students:
-        if student["studentid"] == student_id:
+        if student["studentid"] == int(request.args.get("sid")):
             students.remove(student)
             response = jsonify("Student removed successfully")
             response.status_code =200
@@ -41,7 +41,7 @@ def delete_student_by_id(student_id):
     response.status_code =404
     return response
 
-@app.route('/students/', methods = ["POST", "PUT"])
+@app.route('/student/', methods = ["POST", "PUT"])
 def update_student_by_id():
     new_student = request.json
     for student in students:
