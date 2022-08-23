@@ -64,6 +64,8 @@ def add_student():
         conn.commit()
         if affected_row ==1 :
             return format_response("Added successfully",200)
+        else:
+            return format_response("Student didn't add",404)
 
     except pymysql.Error as e:
         return format_response(e.args[1],400)
@@ -74,8 +76,8 @@ def add_student():
 @app.route('/student/', methods =["PUT"])
 def update_student():
     try:
-        new_student = request.json
-        affected_row=cursor.execute(f'UPDATE student SET studentName="{new_student["studentName"]}",contact="{new_student["contact"]}",courseCode="{new_student["courseCode"]}",dateOfBirth="{new_student["dateOfBirth"]}" WHERE studentID={new_student["studentID"]}')
+        edit_student = request.json
+        affected_row=cursor.execute(f'UPDATE student SET studentName="{edit_student["studentName"]}",contact="{edit_student["contact"]}",courseCode="{edit_student["courseCode"]}",dateOfBirth="{edit_student["dateOfBirth"]}" WHERE studentID={edit_student["studentID"]}')
         conn.commit()
         if affected_row ==1 :
             return format_response("updated successfully",200)
