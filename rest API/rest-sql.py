@@ -16,7 +16,7 @@ conn = mysql.connect()
 cursor = conn.cursor(pymysql.cursors.DictCursor)
 
 #function to respone
-def format_respone (message, status_code):
+def format_response (message, status_code):
     response=jsonify(message)
     response.status_code=status_code
     return response
@@ -28,16 +28,16 @@ def get_all_students():
             affected_row=cursor.execute(f'SELECT * FROM student WHERE studentID = {request.args.get("sid")}')
             if affected_row==1:
                 rows = cursor.fetchall()
-                return format_respone(rows, 200)
+                return format_response(rows, 200)
             else:
-                return format_respone("Student not found", 200)
+                return format_response("Student not found", 200)
         else:
             cursor.execute("SELECT * FROM student")
             rows = cursor.fetchall()
-            return format_respone(rows, 200)
+            return format_response(rows, 200)
 
     except pymysql.Error as e:
-        return format_respone(e.args[1],400)
+        return format_response(e.args[1],400)
 
 
 @app.route('/student/', methods =["DELETE"])
@@ -46,12 +46,12 @@ def delete_student():
         affected_row=cursor.execute(f'DELETE FROM student WHERE studentID={request.args.get("sid")}')
         conn.commit()
         if affected_row ==1 :
-            return format_respone("Deleted successfully",200)
+            return format_response("Deleted successfully",200)
         else:
-            return format_respone("Can't find the student",200)
+            return format_response("Can't find the student",200)
 
     except pymysql.Error as e:
-        return format_respone(e.args[1],400)
+        return format_response(e.args[1],400)
 
 
 
@@ -63,10 +63,10 @@ def add_student():
         affected_row=cursor.execute(f'INSERT INTO student VALUES ({new_student["studentID"]},"{new_student["studentName"]}","{new_student["contact"]}","{new_student["courseCode"]}","{new_student["dateOfBirth"]}")')
         conn.commit()
         if affected_row ==1 :
-            return format_respone("Added successfully",200)
+            return format_response("Added successfully",200)
 
     except pymysql.Error as e:
-        return format_respone(e.args[1],400)
+        return format_response(e.args[1],400)
 
 
 
@@ -78,10 +78,10 @@ def update_student():
         affected_row=cursor.execute(f'UPDATE student SET studentName="{new_student["studentName"]}",contact="{new_student["contact"]}",courseCode="{new_student["courseCode"]}",dateOfBirth="{new_student["dateOfBirth"]}" WHERE studentID={new_student["studentID"]}')
         conn.commit()
         if affected_row ==1 :
-            return format_respone("updated successfully",200)
+            return format_response("updated successfully",200)
         else:
-            return format_respone("Student didn't update",404)
+            return format_response("Student didn't update",404)
     except pymysql.Error as e:
-        return format_respone(e.args[1],400)
+        return format_response(e.args[1],400)
 
 app.run(host='localhost', port=3001)
