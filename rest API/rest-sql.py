@@ -1,16 +1,32 @@
 from flask import Flask, jsonify, request
 from flaskext.mysql import MySQL
 import pymysql
+from flask_cors import CORS
+import os
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
+CORS(app)
+
+auth = HTTPBasicAuth()
+@auth.verify_password
+def authenticate(username, password):
+    print(username,password)
+    print(username=='GBCA' and password == 'abc!!')
+    if username=='GBCA' and password == 'abc!!':
+        return True
+    else: 
+        return False
 
 # Open database connection
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'password'
+# how to set env: export xxx=123 then os.environ.get(xxx)
+app.config['MYSQL_DATABASE_PASSWORD'] = os.environ.get("MYSQL_DATABASE_PASSWORD")
 app.config['MYSQL_DATABASE_DB'] = 'career_training'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+
 
 conn = mysql.connect()
 cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -21,7 +37,7 @@ def format_response (message, status_code):
     response.status_code=status_code
     return response
 
-@app.route('/student/')
+@app.route('/student')
 def get_all_students():
     try:
         if request.args.get("sid"):
@@ -33,6 +49,7 @@ def get_all_students():
                 return format_response("Student not found", 200)
         else:
             cursor.execute("SELECT * FROM student")
+            cursor.execute("SELECT studentid, studentname as student_name, contact as mobile FROM student")
             rows = cursor.fetchall()
             return format_response(rows, 200)
 
@@ -40,7 +57,8 @@ def get_all_students():
         return format_response(e.args[1],400)
 
 
-@app.route('/student/', methods =["DELETE"])
+@app.route('/student', methods =["DELETE"])
+@auth.login_required
 def delete_student():
     try:
         affected_row=cursor.execute(f'DELETE FROM student WHERE studentID={request.args.get("sid")}')
@@ -56,7 +74,8 @@ def delete_student():
 
 
 
-@app.route('/student/', methods =["POST"])
+@app.route('/student', methods =["POST"])
+@auth.login_required
 def add_student():
     try:
         new_student = request.json
@@ -65,19 +84,20 @@ def add_student():
         if affected_row ==1 :
             return format_response("Added successfully",200)
         else:
-            return format_response("Student didn't add",404)
+            return format_response("Can't add the student",404)
 
     except pymysql.Error as e:
         return format_response(e.args[1],400)
 
 
 
-
+# when add auth , redirection will fall
 @app.route('/student/', methods =["PUT"])
+@auth.login_required
 def update_student():
     try:
-        edit_student = request.json
-        affected_row=cursor.execute(f'UPDATE student SET studentName="{edit_student["studentName"]}",contact="{edit_student["contact"]}",courseCode="{edit_student["courseCode"]}",dateOfBirth="{edit_student["dateOfBirth"]}" WHERE studentID={edit_student["studentID"]}')
+        new_student = request.json
+        affected_row=cursor.execute(f'UPDATE student SET studentName="{new_student["studentName"]}",contact="{new_student["contact"]}",courseCode="{new_student["courseCode"]}",dateOfBirth="{new_student["dateOfBirth"]}" WHERE studentID={new_student["studentID"]}')
         conn.commit()
         if affected_row ==1 :
             return format_response("updated successfully",200)
