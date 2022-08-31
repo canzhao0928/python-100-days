@@ -1,0 +1,122 @@
+body {
+    text-align: center;
+    font-family: ;
+}
+
+
+.top_container {
+    background-color: #EAF6F6;
+    margin: 0px 0px 0px 0px;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.top-cloud{
+    position: relative;
+    left: 300px;
+    margin-top: 50px;
+}
+
+.bottom-cloud{
+    position: absolute;
+    left: 25%;
+}
+
+h1{
+    font-size: 5.625rem;
+    font-family: "sacramento", cursive;
+    margin: 50px auto 0 auto;
+    color: #66BFBF;
+}
+
+h3{
+    color: #11999E;
+}
+
+h2{
+    font-size: 2.5rem;
+    font-family: "Montserrat", sans-serif;
+    margin: 0px auto 50px auto;
+    color: #66BFBF;
+}
+
+.selfies {
+    border-radius: 50%;
+    width: 200px;
+}
+
+.skill-row {
+    width: 50%;
+    text-align: left; /*why inmage changed the position?*/
+    margin: 100px auto;
+    line-height: 2;
+}
+
+.skill-photo1 {
+    border-radius: 50%;
+    width: 25%;
+    float: left;
+    margin-right: 30px;
+}
+
+.skill-photo2 {
+    width: 25%;
+    float: right;
+    margin-left: 30px;
+}
+
+.span {
+    text-decoration: underline;
+}
+
+p {
+    color: #40514E;
+}
+
+hr {
+    border: none;
+    border-top: dotted;
+    border-top-width: 5px;
+    border-color: #EAF6F6;
+    width: 40px;
+    margin: 50px auto;
+}
+.button{
+  background-color: #11999E; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  margin: 50px auto 100px auto;
+}
+
+.bottom-container {
+    background-color:#66BFBF;
+    padding-top: 40px;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+a{
+    color: #11999E;
+    padding: 10px;
+    font-family: "Montserrat", sans-serif;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #EAF6F6;
+}
+
+.name{
+    color: #EAF6F6;
+}
+.self-introduction{
+    width: 400px;
+    margin: auto;
+    line-height: 2;
+}
