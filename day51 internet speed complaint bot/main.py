@@ -1,4 +1,3 @@
-from unittest import result
 from selenium import webdriver
 import time
 

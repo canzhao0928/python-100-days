@@ -11,11 +11,11 @@ driver.get("https://orteil.dashnet.org/experiments/cookie/")
 cookie=driver.find_element_by_id("cookie")
 
 start=time.time()
-while time.time() < start+5:
+while time.time() < start+200:
     cookie.click()
 
 #bom update can't find the element,so need to find by element when use it
-# buyGrandma=driver.find_element_by_id("buyGrandma")
+buyGrandma=driver.find_element_by_id("buyGrandma")
 while driver.find_element_by_id("buyGrandma").get_attribute("class")=="":
     driver.find_element_by_id("buyGrandma").click()
     time.sleep(1)
